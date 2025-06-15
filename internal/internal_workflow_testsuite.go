@@ -1003,6 +1003,14 @@ func (env *testWorkflowEnvironmentImpl) advanceTime(duration time.Duration) {
 	env.mockClock.Add(duration)
 }
 
+func (env *testWorkflowEnvironmentImpl) drainCallbacks() {
+	// Process all pending callbacks synchronously
+	for len(env.callbackChannel) > 0 {
+		callback := <-env.callbackChannel
+		callback.processCallback()
+	}
+}
+
 func (env *testWorkflowEnvironmentImpl) autoFireNextTimer() bool {
 	if !env.autoSkipTime {
 		return false

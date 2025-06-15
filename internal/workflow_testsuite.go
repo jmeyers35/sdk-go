@@ -360,6 +360,13 @@ func (e *TestWorkflowEnvironment) SetAutoSkipTime(autoSkipTime bool) {
 	e.impl.autoSkipTime = autoSkipTime
 }
 
+// DrainCallbacks processes all pending callbacks synchronously.
+// This is useful when using manual time advancement to ensure completion
+// callbacks are processed before checking workflow results.
+func (e *TestWorkflowEnvironment) DrainCallbacks() {
+	e.impl.drainCallbacks()
+}
+
 // SetStartTime sets the start time of the workflow. This is optional, default start time will be the wall clock time when
 // workflow starts. Start time is the workflow.Now(ctx) time at the beginning of the workflow.
 func (e *TestWorkflowEnvironment) SetStartTime(startTime time.Time) {
